@@ -1,0 +1,25 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2020-01-02 15:01:52.409010", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Sura", 
+ "modified": "2020-01-02 15:01:57.228956", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "CorteX", 
+ "owner": "Administrator", 
+ "query": "SELECT  i.item_group as \"Tipo::160\",  sum(i.amount) as \"Total:Currency:120\" \n\tFROM `tabSales Invoice Item` i,  `tabSales Invoice` s \n\tWHERE s.name = i.parent AND s.posting_date = %(date)s GROUP BY  i.item_group\n\tUNION \n\tSELECT \"TOTAL INGRESOS\" , sum(s.base_grand_total) \n\tFROM  `tabSales Invoice` s WHERE s.posting_date = %(date)s AND s.docstatus = 1\n\tUNION \n\tSELECT  \"RETIROS\",  \"\"\n\tUNION \n\tSELECT  \"x METODO DE PAGO\",  \"\"\n\tUNION \n\tSELECT p.mode_of_payment , sum(s.grand_total) \n\tFROM`tabSales Invoice Payment` p,  `tabSales Invoice` s \n\tWHERE  s.name = p.parent AND s.posting_date = %(date)s \n\tGROUP BY p.mode_of_payment\n\tUNION \n\tSELECT  \"x TIPO DE VENTA\",  \"\"\n\tUNION SELECT p.description, sum(p.tax_amount) \n\tFROM `tabSales Taxes and Charges` p,  `tabSales Invoice` s \n\tWHERE s.name = p.parent  AND s.posting_date = %(date)s \n\tAND s.docstatus = 1 AND p.account_head =\"IEPS - PC\" GROUP BY  p.description\n\tUNION SELECT p.description , sum(p.base_tax_amount_after_discount_amount) \n\tFROM `tabSales Taxes and Charges` p,  `tabSales Invoice` s \n\tWHERE s.name = p.parent AND s.posting_date = %(date)s \n\tAND s.docstatus = 1 AND p.account_head =\"IVA - PC\" GROUP BY   p.description\n\tUNION SELECT \"Ingresos - EXENTO\" , sum(t.net_amount) \n\tFROM `tabSales Invoice Item` t,  `tabSales Invoice` s \n\tWHERE (s.name = t.parent  AND t.item_tax_rate = \"{\\\"EXENTO - PC\\\":0}\" \n\tAND s.docstatus = 1 AND s.posting_date = %(date)s)\n\tUNION SELECT \"Ingresos - IVA\" , sum(t.net_amount) \n\tFROM `tabSales Invoice Item` t,  `tabSales Invoice` s \n\tWHERE (s.name = t.parent  AND t.item_tax_rate = \"{\\\"IVA - PC\\\":16}\" \n\tAND s.docstatus = 1  AND s.posting_date = %(date)s)\n\tUNION SELECT \"Ingresos - IEPS\" , sum(t.net_amount) \n\tFROM `tabSales Invoice Item` t,  `tabSales Invoice` s \n\tWHERE (s.name = t.parent  AND t.item_tax_rate = \"{\\\"IEPS - PC\\\":8}\" \n\tAND s.docstatus = 1  AND s.posting_date = %(date)s)\n\tOR (s.name = t.parent  AND t.item_tax_rate = \"{\\\"IEPS - PC\\\": 8.0}\" \n\tAND s.docstatus = 1  AND s.posting_date = %(date)s)", 
+ "ref_doctype": "Sales Invoice", 
+ "report_name": "CorteX", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ]
+}

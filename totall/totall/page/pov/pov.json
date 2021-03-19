@@ -1,0 +1,22 @@
+{
+ "content": null,
+ "creation": "2018-02-05 07:18:48.822059",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2018-02-05 07:19:09.114430",
+ "modified_by": "Administrator",
+ "module": "Totall", 
+ "name": "pov",
+ "owner": "Administrator",
+ "page_name": "POV",
+ "roles": [
+  {
+   "role": "Cajero"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0
+}

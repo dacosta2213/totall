@@ -1,0 +1,52 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2020-04-03 14:56:50.323723", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Sura", 
+ "modified": "2020-04-03 16:44:37.365717", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "Movimientos de Clientes", 
+ "owner": "Administrator", 
+ "query": "select\n       b.name as \"Facturas:Link/Sales Invoice:80\",\n       b.total as \"Total Factura\",\n       b.currency as \"Moneda de Factura::100\",\n       c.name as \"Notas de Credito:Link/CFDI Nota de Credito:80\",\n       c.currency as \"Moneda NCR::100\",\n       c.total as \"Total nota de Credito\",\n       d.name as \"Pagos:Link/Payment Entry:80\"\nfrom  `sura.totall.mx`.`tabCustomer` a left join \n`sura.totall.mx`.`tabSales Invoice` b on a.customer_name = b.customer left join \n`sura.totall.mx`.`tabCFDI Nota de Credito` c on a.customer_name = c.customer left join \n`sura.totall.mx`.`tabPayment Entry` d on a.customer_name = d.party \n  \n  where d.name not like '%%NC%%' and b.docstatus = 1 and c.docstatus = 1 and d.docstatus = 1 and a.customer_name = %(a.customer_name)s\n  \n  ", 
+ "ref_doctype": "Customer", 
+ "report_name": "Movimientos de Clientes", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Stock User"
+  }, 
+  {
+   "role": "Sales User"
+  }, 
+  {
+   "role": "Accounts User"
+  }, 
+  {
+   "role": "Accounts Manager"
+  }, 
+  {
+   "role": "Sales Master Manager"
+  }, 
+  {
+   "role": "Stock Manager"
+  }, 
+  {
+   "role": "Sales Manager"
+  }, 
+  {
+   "role": "Vendedor Mapas"
+  }, 
+  {
+   "role": "Cobranza"
+  }, 
+  {
+   "role": "Telemark"
+  }
+ ]
+}

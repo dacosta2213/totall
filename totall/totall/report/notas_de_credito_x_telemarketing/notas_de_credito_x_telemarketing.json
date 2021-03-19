@@ -1,0 +1,34 @@
+{
+ "add_total_row": 1, 
+ "apply_user_permissions": 0, 
+ "creation": "2020-10-30 10:17:30.896442", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "BYPARSA", 
+ "modified": "2020-10-30 10:17:30.896442", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "NOTAS DE CREDITO X TELEMARKETING", 
+ "owner": "Administrator", 
+ "query": "SELECT a.name as \"Folio:Link/CFDI Nota de Credito:80\", a.customer as \"Cliente:Link/Customer:350\", c.telemarketing as \"Telemarketing::100\", a.creation as \"Fecha::90\", a.total_neto as \"Total Sin IVA:Currency:100\", a.tipo_de_factura as \"Tipo de Factura::100\"\nFROM `tabCFDI Nota de Credito` a left join\n     `tabSI Sustitucion` b on a.name = b.parent left join\n     `tabvariables` c on b.sales_invoice = c.parent\nWHERE a.creation >= %(a.from_date)s and a.creation <= %(a.to_date)s AND a.docstatus = 1\norder by a.creation desc", 
+ "ref_doctype": "CFDI Nota de Credito", 
+ "report_name": "NOTAS DE CREDITO X TELEMARKETING", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Administrator"
+  }, 
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "POS"
+  }, 
+  {
+   "role": "Cobranza"
+  }
+ ]
+}

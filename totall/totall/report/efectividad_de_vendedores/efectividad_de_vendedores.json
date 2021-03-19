@@ -1,0 +1,37 @@
+{
+ "add_total_row": 1, 
+ "apply_user_permissions": 1, 
+ "creation": "2020-06-10 16:51:38.852650", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Sura", 
+ "modified": "2020-07-02 16:53:40.918123", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "Efectividad de Vendedores", 
+ "owner": "Administrator", 
+ "query": "select owner as 'Vendedor::150', \ncount(*) as 'Numero de Oportunidades::150',\n\ncount(lead) as \"Prospectos\",  \n\nsum(valor_de_la_oportunidad) as 'Valor de Oportunidades:Currency:150', \n\nCOUNT(IF(status = 'converted' or status = 'closed', 1, null)) 'Numero de Convertidas o Cerradas::150', \n\nsum(if(status = 'converted' or status = 'closed',valor_de_la_oportunidad,0)) as 'Valor de Convertidas:Currency:150',\n\nsum(if(status = 'converted' or status = 'closed',valor_de_la_oportunidad,0)) * 100 / sum(valor_de_la_oportunidad) as 'Porcentaje de Efectividad:Percent:150',\n\nsum(if(status = 'converted' or status = 'closed',valor_de_la_oportunidad,0))\n / COUNT(IF(status = 'converted' or status = 'closed', 1, null)) as 'Ticket Promedio:Currency:150'\n\n\nfrom `tabOpportunity` \n\nwhere creation >= %(from_date)s and creation <= %(to_date)s and owner != 'Administrator'\n\ngroup by owner", 
+ "ref_doctype": "Opportunity", 
+ "report_name": "Efectividad de Vendedores", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Sales User"
+  }, 
+  {
+   "role": "Sales Manager"
+  }, 
+  {
+   "role": "Vendedor Mapas"
+  }, 
+  {
+   "role": "Vendedor"
+  }, 
+  {
+   "role": "Telemark"
+  }
+ ]
+}

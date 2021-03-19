@@ -1,0 +1,46 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2019-11-21 14:18:33.938239", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Sura", 
+ "modified": "2020-12-29 10:45:14.608445", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "Stock Con Ultimo Costo", 
+ "owner": "Administrator", 
+ "query": "select * from (select a.name as \"Clave\", \n       a.item_name as \"Descripcion::150\",\n       a.brand as \"Marca::80\", \n       a.default_warehouse as \"Almacen\",\n       a.anaquel as \"Ubicacion\",\n       a.actual as \"Existencia\",\n       case when b.base_rate is null then a.valuation_rate when b.base_rate = 0 then a.valuation_rate else b.base_rate end as \"Precio\", \n       a.actual*case when b.base_rate is null then a.valuation_rate when b.base_rate = 0 then a.valuation_rate else b.base_rate end as \"Valor de Inventario\",\n       b.creation as \"Fecha\"\n\nfrom `tabItem` a left join \n     `tabPurchase Order Item` b on b.creation <= %(b.creation)s and a.item_code = b.item_code  group by fecha desc, clave) tabla group by tabla.clave", 
+ "ref_doctype": "Item", 
+ "report_name": "Stock Con Ultimo Costo", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Item Manager"
+  }, 
+  {
+   "role": "Stock Manager"
+  }, 
+  {
+   "role": "Stock User"
+  }, 
+  {
+   "role": "Sales User"
+  }, 
+  {
+   "role": "Purchase User"
+  }, 
+  {
+   "role": "Maintenance User"
+  }, 
+  {
+   "role": "Accounts User"
+  }, 
+  {
+   "role": "Manufacturing User"
+  }
+ ]
+}

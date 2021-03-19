@@ -1,0 +1,25 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2020-01-02 15:03:24.519323", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Sura", 
+ "modified": "2020-01-10 16:26:09.767604", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "Corte", 
+ "owner": "Administrator", 
+ "query": "SELECT  \"Total\" as \"Tipo::160\",  sum(s.grand_total) as \"Total:Currency:120\",\"Iva:Currency:120\"\n\tFROM `tabSales Invoice` s\n    INNER JOIN `tabSales Invoice Payment` as p ON s.name = p.parent AND p.mode_of_payment = \"Efectivo\"\n\tWHERE s.posting_date = %(date)s\n\tUNION\n    SELECT \"IVA incluido\" , sum(p.base_tax_amount_after_discount_amount),\"\"\n\tFROM `tabSales Taxes and Charges` p,  `tabSales Invoice` s\n    INNER JOIN `tabSales Invoice Payment` as sp ON s.name = sp.parent AND sp.mode_of_payment = \"Efectivo\"\n\tWHERE s.name = p.parent AND s.posting_date = %(date)s\n\tAND s.docstatus = 1 AND p.account_head =\"207.01 - IVA trasladado - SAT\" GROUP BY p.description\n\tUNION\n    SELECT  \"Total en Caja\",  sum(s.grand_total),\"\"\n\tFROM  `tabSales Invoice` s\n    INNER JOIN `tabSales Invoice Payment` as p ON s.name = p.parent AND p.mode_of_payment = \"Efectivo\"\n\tWHERE s.posting_date = %(date)s\n    UNION\n    SELECT \"Ventas Por Documento\",\"\",\"\"\n    UNION\n    SELECT s.perfil_facturacion, sum(s.grand_total), sum(p.base_tax_amount_after_discount_amount)\n    FROM `tabSales Invoice` s, `tabSales Taxes and Charges` p\n    WHERE s.docstatus = 1 AND s.posting_date = %(date)s AND s.name = p.parent\n    AND p.account_head =\"207.01 - IVA trasladado - SAT\"\n    GROUP BY s.perfil_facturacion\n    UNION\n    SELECT \"Formas de Pago\",\"\",\"\"\n    UNION\n    SELECT  p.mode_of_payment,  sum(s.grand_total) as \"Total:Currency:120\",\"\"\n\tFROM `tabSales Invoice` s\n    INNER JOIN `tabSales Invoice Payment` as p ON s.name = p.parent\n\tWHERE s.posting_date = %(date)s GROUP BY p.mode_of_payment", 
+ "ref_doctype": "Sales Invoice", 
+ "report_name": "Corte", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ]
+}

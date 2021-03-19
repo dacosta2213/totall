@@ -1,0 +1,18 @@
+
+<table class="table table-bordered assessment-result-tool">
+	<thead>
+		<tr>
+			<th style="width: 25%" >Almacen</th>
+			<th style="width: 25%" >Cant</th>
+		</tr>
+
+	<tbody>
+		{% for d in datos %}
+		<tr>
+			<td>{{ d.warehouse }}<br></td>
+			<td>{{ d.actual_qty }}<br></td>
+	</tr>
+	{% endfor %}
+  </tbody>
+</thead>
+</table>

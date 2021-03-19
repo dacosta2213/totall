@@ -1,0 +1,22 @@
+
+<table class="table table-bordered assessment-result-tool">
+	<thead>
+		<tr>
+			<th style="width: 25%" >Cliente</th>
+			<th style="width: 25%" >Prospecto</th>
+			<th style="width: 30%" ><span data-toggle="tooltip" title="Hora">Hora</span></th>
+			<th style="width: 45%" ><span data-toggle="tooltip" title="Comentarios">Comentarios</span></th>
+		</tr>
+
+	<tbody>
+		{% for b in datos %}
+		<tr>
+			<td>{{ b.cliente }}<br>
+			<td>{{ b.nombre_prospecto }}<br>
+			<td>{{ b.time }}</td>
+			<td>{{ b.comentario }}</td>
+	</tr>
+	{% endfor %}
+  </tbody>
+</thead>
+</table>

@@ -1,0 +1,113 @@
+<style>
+  .print-format table, .print-format tr,  .print-format td, .print-format div, .print-format p {
+    font-family: Monospace;
+    font-size:12px;
+    line-height: 90%;
+    vertical-align: middle;
+  }
+  @media screen{
+    .print-format {
+      width: 4in;
+      padding: 0.1in;
+      min-height: 4in;
+    }
+  }
+</style>
+<p class="text-center">
+  <img src="https://lite.totall.mx/files/logokire.png" style="width: 455px;">
+</p>
+<br>
+<div>
+  <div>
+    <b style="color: rgb(34, 34, 34); font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
+      <i>
+        <span style="font-family: Arial, sans-serif; color: rgb(0, 32, 96);">"
+          Integramos soluciones de calidad mundial, para el mercado Mexicano "
+        </span>
+      </i>
+    </b>
+    <span style="background-color: rgb(255, 255, 0);">
+      <br>
+    </span>
+  </div>
+  <div><br></div>
+  <div>
+    <h5>Usuario: {{ frappe.user.full_name() }}</h5>
+    <h5>Fecha de generación: {{ frappe.format(frappe.datetime.now_datetime(),{'fieldtype': 'Date'}) }}</h5>
+  </div>
+  <br>
+</div>
+<div>
+  <table class="table table-bordered assessment-result-tool">
+    <thead>
+      <tr>
+        <th colspan="2">Resumen de Ventas en Efectivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in data %}
+        {% if q.Tipo == "Ventas Por Documento"%}
+          {%break%}
+        {% endif %}
+          <tr>
+            <td align="left">{{ q.Tipo }}<br></td>
+            <td align="right">{{ format_currency(q.Total,"MXN",2) }}<br></td>
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+</div>
+<div>
+  <table class="table table-bordered assessment-result-tool">
+    <thead>
+      <tr>
+        <th colspan="2">VENTAS POR DOCUMENTO</th>
+        <th>IVAS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% var pos = "" %}
+      {% for q in data %}
+        {% if q.Tipo == "Formas de Pago" %}
+          {%break%}
+        {% endif %}
+        {% if q.Tipo == "Ventas Por Documento"%}
+          {% pos = "Ventas Por Documento" %}
+        {% else %}
+          {% if pos == "Ventas Por Documento"%}
+            <tr>
+              <td align="left">{{ q.Tipo }}<br></td>
+              <td align="right">{{ format_currency(q.Total,"MXN",2) }}<br></td>
+              <td align="right">{{ format_currency(q.Iva,"MXN",2) }}<br></td>
+            </tr>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div>
+  <table class="table table-bordered assessment-result-tool">
+    <thead>
+      <tr>
+        <th colspan="2">FORMAS DE PAGO</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% var pos = "" %}
+      {% for q in data %}
+        {% if q.Tipo == "Formas de Pago"%}
+          {% pos = "Formas de Pago" %}
+        {% else %}
+          {% if pos == "Formas de Pago"%}
+            <tr>
+              <td align="left">{{ q.Tipo }}<br></td>
+              <td align="right">{{ format_currency(q.Total,"MXN",2) }}<br></td>
+            </tr>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
