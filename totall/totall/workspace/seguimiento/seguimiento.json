@@ -1,0 +1,44 @@
+{
+ "category": "Modules",
+ "charts": [],
+ "creation": "2021-03-23 10:06:17.299973",
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends_another_page": 0,
+ "hide_custom": 0,
+ "icon": "ruta",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "Seguimiento",
+ "links": [],
+ "modified": "2021-03-23 12:07:51.641776",
+ "modified_by": "Administrator",
+ "module": "Totall",
+ "name": "Seguimiento",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 0,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "Ruta",
+   "link_to": "Ruta",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Monitor Mapa",
+   "link_to": "Monitormapa",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Recorrido Mapa",
+   "link_to": "RecorridoMapa",
+   "type": "DocType"
+  }
+ ]
+}

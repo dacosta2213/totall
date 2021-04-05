@@ -21,8 +21,6 @@ error_report_email = "admin@codigo-binario.com"
 
 # app_include_css = "/assets/totall/css/totall.css"
 # app_include_js = "/assets/totall/js/totall.js"
-
-
 #website_context = {
 #	"favicon": 	"/assets/totall/images/favicon.png",
 #	"splash_image": "/assets/totall/images/posix.svg"
@@ -53,7 +51,6 @@ error_report_email = "admin@codigo-binario.com"
 # include js in doctype views
 doctype_js = {
 	"Purchase Order" : "public/js/totall_purchase_order.js",
-	"Opportunity" : "public/js/totall_opportunity.js",
 	"Sales Invoice" : "public/js/totall_sales_invoice.js",
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
