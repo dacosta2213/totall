@@ -52,6 +52,7 @@ error_report_email = "admin@codigo-binario.com"
 doctype_js = {
 	"Purchase Order" : "public/js/totall_purchase_order.js",
 	"Sales Invoice" : "public/js/totall_sales_invoice.js",
+	"Payment Entry" : "public/js/payment_entry.js"
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

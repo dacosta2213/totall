@@ -1,44 +1,47 @@
 {
- "add_total_row": 0, 
- "apply_user_permissions": 1, 
- "creation": "2019-11-14 13:52:18.371951", 
- "disabled": 0, 
- "docstatus": 0, 
- "doctype": "Report", 
- "idx": 0, 
- "is_standard": "Yes", 
- "json": "{\"add_total_row\": 0, \"sort_by\": \"Item.stock_minimo\", \"add_totals_row\": 0, \"sort_order\": \"asc\", \"sort_by_next\": null, \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Item\"], [\"description\", \"Item\"], [\"brand\", \"Item\"], [\"default_warehouse\", \"Item\"], [\"actual\", \"Item\"], [\"stock_minimo\", \"Item\"], [\"stock_maximo\", \"Item\"], [\"reorder\", \"Item\"], [\"disabled\", \"Item\"], [\"valuation_rate\", \"Item\"], [\"last_purchase_rate\", \"Item\"]]}", 
- "letter_head": "BYPARSA", 
- "modified": "2020-10-12 10:42:45.670419", 
- "modified_by": "Administrator", 
- "module": "Totall", 
- "name": "Max", 
- "owner": "Administrator", 
- "ref_doctype": "Item", 
- "report_name": "Max", 
- "report_type": "Report Builder", 
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2019-11-14 13:52:18.371951",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{\"add_total_row\": 0, \"sort_by\": \"Item.stock_minimo\", \"add_totals_row\": 0, \"sort_order\": \"asc\", \"sort_by_next\": null, \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Item\"], [\"description\", \"Item\"], [\"brand\", \"Item\"], [\"default_warehouse\", \"Item\"], [\"actual\", \"Item\"], [\"stock_minimo\", \"Item\"], [\"stock_maximo\", \"Item\"], [\"reorder\", \"Item\"], [\"disabled\", \"Item\"], [\"valuation_rate\", \"Item\"], [\"last_purchase_rate\", \"Item\"]]}",
+ "modified": "2021-11-30 04:34:14.148705",
+ "modified_by": "Administrator",
+ "module": "Totall",
+ "name": "Max",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "select\r\na.name as \"Clave de Articulo:Link/Item:250\",\r\na.description as \"Descripcion::550\",\r\na.brand as \"Marca:Link/Brand:120\",\r\nb.warehouse as \"Almacen:Link/Warehouse:120\",\r\n@Existencia := case when b.actual_qty is null then 0 else b.actual_qty end as \"Existencia\",\r\na.stock_uom as 'Unidad de Medida'\r\nfrom `tabItem` a left join `tabBin` b\r\nON a.name = b.item_code\r\n",
+ "ref_doctype": "Item",
+ "report_name": "Max",
+ "report_type": "Query Report",
  "roles": [
   {
    "role": "Item Manager"
-  }, 
+  },
   {
    "role": "Stock Manager"
-  }, 
+  },
   {
    "role": "Stock User"
-  }, 
+  },
   {
    "role": "Sales User"
-  }, 
+  },
   {
    "role": "Purchase User"
-  }, 
+  },
   {
    "role": "Maintenance User"
-  }, 
+  },
   {
    "role": "Accounts User"
-  }, 
+  },
   {
    "role": "Manufacturing User"
   }

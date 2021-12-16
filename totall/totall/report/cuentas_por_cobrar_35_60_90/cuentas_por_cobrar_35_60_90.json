@@ -1,29 +1,32 @@
 {
- "add_total_row": 0, 
- "apply_user_permissions": 1, 
- "creation": "2019-12-19 23:19:18.427428", 
- "disabled": 0, 
- "docstatus": 0, 
- "doctype": "Report", 
- "idx": 0, 
- "is_standard": "Yes", 
- "letter_head": "Sura", 
- "modified": "2020-12-02 13:07:46.055528", 
- "modified_by": "Administrator", 
- "module": "Totall", 
- "name": "Cuentas por Cobrar 35 60 90", 
- "owner": "Administrator", 
- "query": "select \na.name as \"Folio:Link/Sales Invoice:80\",\na.clave as \"Cliente::80\",\ncase when a.name is null then null else a.customer end as \"Nombre:Link/Customer:250\",  \na.posting_date as \"Fecha::100\",\na.due_date as \"Vencimiento::100\",\n a.agente as \"Agente\",\na.currency as \"Moneda\",\nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) >= 0 AND DATEDIFF(CURRENT_DATE(), a.posting_date) <= 35\nTHEN a.outstanding_amount/a.conversion_rate  else null end) as \"0-35:Currency:80\",\nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) >= 36 AND DATEDIFF(CURRENT_DATE(), a.posting_date) <= 60 THEN a.outstanding_amount/a.conversion_rate else null end) as \"35-60:Currency:80\",\nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) > 60 AND DATEDIFF(CURRENT_DATE(), a.posting_date) <= 90 THEN a.outstanding_amount/a.conversion_rate else null end) as \"60-90:Currency:80\", \nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) > 90 THEN a.outstanding_amount/a.conversion_rate else null end) as \"Mas 90:Currency:80\"\nfrom\n`tabSales Invoice` a left join\n`tabvariables` e on a.name = e.parent\nwhere a.name like '%%A%%' and a.customer != 'VENTAS DE CONTADO' and a.customer != 'CHARROS' and a.customer != 'VENTAS DE CONTADO - 1' and a.posting_date >= %(a.from_date)s and a.posting_date <= %(a.to_date)s and a.docstatus = 1 and outstanding_amount != 0 and a.status != 'Paid'\nGROUP BY a.CUSTOMER, a.name WITH ROLLUP;", 
- "ref_doctype": "Sales Invoice", 
- "report_name": "Cuentas por Cobrar 35 60 90", 
- "report_type": "Query Report", 
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2019-12-19 23:19:18.427428",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Sura",
+ "modified": "2021-12-07 13:09:11.149498",
+ "modified_by": "Administrator",
+ "module": "Totall",
+ "name": "Cuentas por Cobrar 35 60 90",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "select \na.name as \"Folio:Link/Sales Invoice:80\",\na.customer as \"Cliente::80\",\ncase when a.name is null then null else a.customer end as \"Nombre:Link/Customer:250\",  \na.posting_date as \"Fecha::100\",\na.due_date as \"Vencimiento::100\",\na.currency as \"Moneda\",\nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) >= 0 AND DATEDIFF(CURRENT_DATE(), a.posting_date) <= 35\nTHEN a.outstanding_amount/a.conversion_rate  else null end) as \"0-35:Currency:80\",\nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) >= 36 AND DATEDIFF(CURRENT_DATE(), a.posting_date) <= 60 THEN a.outstanding_amount/a.conversion_rate else null end) as \"35-60:Currency:80\",\nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) > 60 AND DATEDIFF(CURRENT_DATE(), a.posting_date) <= 90 THEN a.outstanding_amount/a.conversion_rate else null end) as \"60-90:Currency:80\", \nSUM(CASE WHEN DATEDIFF(CURRENT_DATE(), a.posting_date) > 90 THEN a.outstanding_amount/a.conversion_rate else null end) as \"Mas 90:Currency:80\",\na.agente as \"Agente::50\",\nb.ruta as \"Ruta::50\"\nfrom\n`tabSales Invoice` a inner join tabCustomer b on a.customer = b.name\nwhere a.posting_date >= %(a.from_date)s and a.posting_date <= %(a.to_date)s and a.docstatus = 1 and outstanding_amount != 0 and a.status != 'Paid'\nGROUP BY a.CUSTOMER, a.name WITH ROLLUP;",
+ "ref_doctype": "Sales Invoice",
+ "report_name": "Cuentas por Cobrar 35 60 90",
+ "report_type": "Query Report",
  "roles": [
   {
    "role": "Accounts Manager"
-  }, 
+  },
   {
    "role": "Accounts User"
-  }, 
+  },
   {
    "role": "Facturacion"
   }

@@ -1,0 +1,32 @@
+{
+ "custom_fields": [],
+ "custom_perms": [],
+ "doctype": "CFDI Nota de Credito Item",
+ "property_setters": [
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "creation": "2021-05-27 13:52:43.569281",
+   "default_value": null,
+   "doc_type": "CFDI Nota de Credito Item",
+   "docstatus": 0,
+   "doctype_or_field": "DocField",
+   "field_name": "item_code",
+   "idx": 0,
+   "modified": "2021-05-27 13:52:43.569281",
+   "modified_by": "dacosta@kireinformatica.com",
+   "name": "CFDI Nota de Credito Item-item_code-default",
+   "owner": "dacosta@kireinformatica.com",
+   "parent": null,
+   "parentfield": null,
+   "parenttype": null,
+   "property": "default",
+   "property_type": "Text",
+   "row_name": null,
+   "value": ""
+  }
+ ],
+ "sync_on_migrate": 1
+}

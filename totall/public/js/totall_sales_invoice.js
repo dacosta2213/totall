@@ -16,6 +16,16 @@
 // });
 
 frappe.ui.form.on('Sales Invoice', {
+	additional_discount_percentage: function(frm, cdt, cdn){
+		$(frm.doc.items).each(function(index){
+			this.descuento = frm.doc.additional_discount_percentage * this.rate / 100
+
+	})
+}
+})
+
+
+frappe.ui.form.on('Sales Invoice', {
 	perfil_facturacion: function(frm, cdt, cdn){
     perfiles(frm, cdt, cdn)
   },
@@ -27,27 +37,32 @@ frappe.ui.form.on('Sales Invoice', {
 				})
 		}
   },
-  forma_de_pago: function(frm, cdt, cdn){
+   after_save: function(frm, cdt, cdn){
     $(frm.doc.payments).each(function(index){
+
         if (frm.doc.forma_de_pago === '03') {
             this.mode_of_payment = "Transferencia Bancaria"
-						this.account = "102.01 - Bancos nacionales - SAT"
-						this.type = "Bank"
+						this.amount = frm.doc.grand_total
+						//this.account = "102.01 - Bancos nacionales - SAT"
+						//this.type = "Bank"
             frm.refresh_field('payments')
         } else if (frm.doc.forma_de_pago === '01') {
 	          this.mode_of_payment = "Efectivo"
-						this.account = "101.01 - Caja y efectivo - SAT"
-						this.type = "Cash"
+			  			this.amount = frm.doc.grand_total
+						// this.account = "101.01 - Caja y efectivo - SAT"
+						// this.type = "Cash"
 	          frm.refresh_field('payments')
         } else if (frm.doc.forma_de_pago === '28') {
 	          this.mode_of_payment = "Tarjeta Debito"
-						this.account = "102.01 - Bancos nacionales - SAT"
-						this.type = "Bank"
+			  			this.amount = frm.doc.grand_total
+						// this.account = "102.01 - Bancos nacionales - SAT"
+						// this.type = "Bank"
 	          frm.refresh_field('payments')
         } else if (frm.doc.forma_de_pago === '04') {
 	          this.mode_of_payment = "Tarjetas de credito"
-						this.account = "102.01 - Bancos nacionales - SAT"
-						this.type = "Bank"
+			  			this.amount = frm.doc.grand_total
+						// this.account = "102.01 - Bancos nacionales - SAT"
+						// this.type = "Bank"
 	          frm.refresh_field('payments')
         }
     })

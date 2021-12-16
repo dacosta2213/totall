@@ -3,7 +3,7 @@
 
 frappe.ui.form.on('RecorridoMapa', {
 	onload: function(frm) {
-		$.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAMpdNUsaTWYFV58yaxVKzg4lHWUWeNgWs")
+		$.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDaF7Z-15BKQmBaiGpSRUc4qfXPVtAN1cU")
 	},
 	refresh: function(frm) {
 		$(".btn[data-fieldname=ver]").addClass('btn-success');
@@ -39,7 +39,7 @@ frappe.ui.form.on('RecorridoMapa', {
 					datos: datos
 				}));
 				result_table.appendTo(frm.fields_dict.tabla_html.wrapper);
-				est = data.message
+				var est = data.message
 				initMap(est)
 			}
 		})

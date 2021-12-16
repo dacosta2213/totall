@@ -55,23 +55,23 @@ def update_atrasado():
 	return
 
 
-@ frappe.whitelist ()
-def ubicacion ():
-    items = frappe.db.get_list ('Item', fields =['name', 'rack', 'ubicacion'])
-    for c in items:
-        ajustes = frappe.db.get_list ('Stock Reconciliation Item', fields =['name','item_code', 'anaquel', 'ubicacion'], order_by = 'creation desc')
-	for a in ajustes:
-         if c.ubicacion != a.rack:
-             #frappe.errprint(c.name)
-             frappe.errprint(a.anaquel)
-             frappe.db.commit()
-#else	/* : */
-#	frappe.db.sql("UPDATE tabCustomer  SET congelado = 0 ,credit_limit = 0 WHERE name = %s", (c.name))
-#	frappe.db.commit()
-    return
+# @ frappe.whitelist ()
+# def ubicacion ():
+#     items = frappe.db.get_list ('Item', fields =['name', 'rack', 'ubicacion'])
+#     for c in items:
+#         ajustes = frappe.db.get_list ('Stock Reconciliation Item', fields =['name','item_code', 'anaquel', 'ubicacion'], order_by = 'creation desc')
+# 	for a in ajustes:
+#          if c.ubicacion != a.rack:
+#              #frappe.errprint(c.name)
+#              frappe.errprint(a.anaquel)
+#              frappe.db.commit()
+# #else	/* : */
+# #	frappe.db.sql("UPDATE tabCustomer  SET congelado = 0 ,credit_limit = 0 WHERE name = %s", (c.name))
+# #	frappe.db.commit()
+#     return
 
 
-# 
+#
 # @frappe.whitelist()
 # def ruta(login_manager):
 #     ruta = frappe.db.get_value("User", login_manager.user,"ruta_login")
@@ -131,13 +131,11 @@ def generar_lead(owner,lead_name,email_id,numero,lead_owner,source,campaign_name
 	doc.insert(ignore_permissions=True)
 	frappe.db.commit()
 #	return('Nuevo Lead: ' + str(doc.name))
-
-        if source != "Conosido":
 #            frappe.db.sql("UPDATE tabLead  SET status='Asignado' WHERE source like '%Publicidad%'")
 #            frappe.db.commit()
-	    frappe.sendmail(['egarcia@totall.mx',"{0}".format(doc.lead_owner)], \
-	    subject=doc.name , \
-	    content="Felicidades usted tiene un nuevo prospecto, de click en la liga para darle seguimiento. ¡Exito!  "+frappe.utils.get_url_to_form(doc.doctype, doc.name),delayed=False)
+	frappe.sendmail(['egarcia@totall.mx',"{0}".format(doc.lead_owner)], \
+    subject=doc.name , \
+    content="Felicidades usted tiene un nuevo prospecto, de click en la liga para darle seguimiento. ¡Exito!  "+frappe.utils.get_url_to_form(doc.doctype, doc.name),delayed=False)
 
 
 
@@ -270,3 +268,289 @@ def factura_global():
 @frappe.whitelist()
 def sin_timbrar():
 	frappe.db.sql("UPDATE `tabSales Invoice` set sin_timbrar = DATEDIFF(CURDATE(), creation) where cfdi_status='Sin Timbrar'")
+
+@frappe.whitelist()
+def nuevas_facturas():
+	anteriores = frappe.db.sql("""SELECT name,creation,date_sub(NOW(),INTERVAL 5 HOUR),TIMESTAMPDIFF(HOUR,creation,date_sub(NOW(),INTERVAL 5 HOUR)) FROM `tabSales Invoice` WHERE docstatus = %s AND TIMESTAMPDIFF(HOUR,creation,date_sub(NOW(),INTERVAL 5 HOUR)) > 24""", (0), as_dict=1)
+	for a in anteriores:
+	    frappe.db.sql("""UPDATE `tabSales Invoice` SET docstatus = 2, observaciones ='Factura cancelada por tiempo de espera excedido'  WHERE name =%s""",(a.name),as_dict=1)
+
+@frappe.whitelist()
+def genera_cotizacion(name='PUR-SQTN-2021-00001'):
+	si = frappe.get_doc('Supplier Quotation', name)
+	articulosproveedor = si.items
+	articulosventa = {}
+	margen = si.margen
+
+    #return
+	frappe.errprint(margen)
+	doc = frappe.new_doc('Quotation')
+	articulosventa = doc.items
+	for a in articulos:
+		a.item_code
+		a.amount = a.amount*margen
+		a.valuation_rate = a.rate
+		for b in articulosventa:
+			b.item_code = a.item_code
+			b.amount = a.amount*margen
+	doc.save()
+	frappe.msgprint('Cotizacion Generada')
+
+
+    #     doc.append("items", {
+    #         "item_code": si.items[0].item_code ,
+    #         "qty": 1,
+    #         "precio_de_venta": si.monto / 1.16,
+    #         "monto": si.monto / 1.16,
+    #         "precio_unitario_neto": si.monto / 1.16,
+    #         "precio_neto": si.monto / 1.16,
+    #         "tax": 16,
+    #         "impuestos_totales": (si.monto / 1.16) * 0.16
+    #     })
+	#
+    #     doc.append("si_sustitucion", {
+    #         "tipo_documento": "Sales Invoice" ,
+    #         "sales_invoice": si.name,
+    #         "uuid": si.uuid,
+    #         "valor": si.monto
+    #     })
+	#
+	#
+	#
+@frappe.whitelist()
+def boton(name):
+	pos = frappe.get_doc('POS Invoice', name)
+	doc = frappe.new_doc('Sales Invoice')
+	doc.items = pos.items
+	doc.customer = pos.customer
+	doc.perfil_facturacion = 'TICKET'
+	doc.is_pos = 1
+	doc.update_stock = 1
+	doc.naming_series = 'TICKET'
+	doc.append("payments", {
+		"mode_of_payment": 'Efectivo',
+		"account": '101.01 - Caja y efectivo - SAT',
+		"amount": pos.grand_total,
+		"type": 'Cash',
+		"base_amount": pos.base_grand_total
+	})
+	doc.save()
+	doc.submit()
+	frappe.errprint(doc.name)
+
+
+
+
+@frappe.whitelist()
+def update_payment_entry(name):
+	doc = frappe.get_doc('Payment Entry',name)
+	references = doc.references
+	gran_total_original = 0
+	for r in references:
+		si = frappe.get_doc('Sales Invoice', r.reference_name)
+		gran_total_original += round(si.monto_pendiente, 2)
+		frappe.db.set_value("Payment Entry Reference", r.name, 'monto_pendiente', si.monto_pendiente)
+	#frappe.db.set_value("Payment Entry", doc.name, 'total_original', gran_total_original)
+	frappe.errprint(gran_total_original)
+
+
+@frappe.whitelist()
+def saldos_cero():
+	frappe.db.sql("""update  `tabGL Entry` a LEFT JOIN `tabPayment Entry` b ON a.voucher_no = b.name SET a.credit_in_account_currency = 0 , a.credit = 0 where b.unallocated_amount = a.credit_in_account_currency AND b.unallocated_amount = a.credit AND b.unallocated_amount > 0 AND b.docstatus = 1""")
+	frappe.db.sql("""update `tabSales Invoice` SET outstanding_amount = 0 WHERE outstanding_amount < 0""")
+
+@frappe.whitelist()
+def crear_pago(name):
+	doc = frappe.get_doc('CFDI Nota de Credito',name)
+	cliente = frappe.get_doc('Customer',doc.customer)
+	today = date.today()
+	frappe.errprint(doc.name)
+	frappe.errprint(doc.conversion_rate)
+
+	pii = frappe.new_doc("Payment Entry")
+	pii.mode_of_payment = 'Transferencia bancaria'
+	# pii.payment_type = 'Pay'
+	pii.party_type = 'Customer'
+	pii.party = doc.customer
+	pii.posting_date = today.strftime("%Y-%m-%d") #Daniel Acosta: Estaba mostrando un error de Fiscal Year al generar el payment entry
+
+	# if doc.forma_de_pago != '01':
+	# 	pii.paid_from = company.default_cash_account
+	# else:
+	# 	pii.paid_from = company.default_bank_account
+
+	#pii.paid_to = company.default_receivable_account #frappe.get_value("Company",doc.company,'default_receivable_account')
+	# pii.paid_to_account_currency = doc.currency
+	# pii.paid_to  = doc.paid_to
+	pii.reference_no = doc.name
+	pii.naming_series = 'NC-'
+	# RG - Los clientes con currency != MXN solo pueden hacaer transacciones en su moneda nativa (ej. USD)
+	# RG - Los clientes sin default_currency o con MXN pueden transaccionar en cualquier moneda
+	# RG - Los payment entries derivados de los descuentos automaticos NO podran timbrarse.
+	pii.paid_amount = float(doc.total) * float(doc.conversion_rate)
+	pii.source_exchange_rate = 1
+	pii.target_exchange_rate = 1
+	pii.received_amount = float(doc.total) * float(doc.conversion_rate)
+	company = frappe.get_doc('Company', pii.company)
+	pii.paid_to = '102.01 - Bancos nacionales - ' + company.abbr
+	# frappe.errprint(float(doc.total) * float(doc.conversion_rate))
+	for i in doc.si_sustitucion:
+		pii.append('references', {
+			'reference_doctype': 'Sales Invoice',
+			'reference_name': i.sales_invoice,
+			'allocated_amount': float(i.valor) * float(doc.conversion_rate),
+			'pagado': float(i.valor) * float(doc.conversion_rate),#cambio hecho por Santiago
+		})
+
+	pii.flags.ignore_permissions = True
+	pii.flags.ignore_mandatory = True
+	frappe.errprint(pii.party)
+	frappe.errprint(pii.paid_to)
+	# pii.flags.ignore_validate = True
+	pii.submit()
+	frappe.db.set_value("CFDI Nota de Credito", name, 'pago', pii.name)
+	doc.pago = pii.name
+	frappe.msgprint('Devolucion monetaria generada : '  + '<a href="#Form/Payment Entry/' + pii.name + '"target="_blank">' + pii.name + '</a>'  )
+	doc.reload()
+
+@frappe.whitelist()
+def create_stock_entry(name):
+	doc = frappe.get_doc('CFDI Nota de Credito',name)
+	if doc.tipo_de_factura == "Devolucion":
+		pii = frappe.new_doc("Stock Entry")
+		pii.stock_entry_type = "Material Receipt"
+		pii.naming_series = "STE-"
+		for i in doc.items:
+			pii.append('items', {
+				'item_code': i.item_code,
+				'qty': i.qty,
+				'uom': i.stock_uom,
+				't_warehouse': i.warehouse,
+			})
+		pii.flags.ignore_permissions = True
+		pii.submit()
+		frappe.msgprint('Devolucion de Inventario generada : '  + '<a href="#Form/Stock Entry/' + pii.name + '"target="_blank">' + pii.name + '</a>'  )
+	frappe.errprint('HECHO')
+
+# RG - Crear Pago
+@frappe.whitelist()
+def cancelar_pago(name):
+	doc = frappe.get_doc('CFDI Nota de Credito', name)
+	pii = frappe.get_doc('Payment Entry', doc.pago)
+	pii.cancel()
+
+@frappe.whitelist()
+def quitar_tags_item_description():
+	frappe.db.sql("""update `tabSales Order Item` set description = (replace(description,'<div class="ql-editor read-mode"><p>',''))""")
+	frappe.db.sql("""update `tabSales Order Item` set description = (replace(description,'</p></div>',''))""")
+	frappe.db.sql("""update `tabSales Order Item` set description = (replace(description,'</p><p>',' '))""")
+	frappe.db.sql("""update `tabSales Invoice Item` set description = (replace(description,'<div class="ql-editor read-mode"><p>',''))""")
+	frappe.db.sql("""update `tabSales Invoice Item` set description = (replace(description,'</p></div>',''))""")
+	frappe.db.sql("""update `tabSales Invoice Item` set description = (replace(description,'<div><p>',''))""")
+	frappe.db.sql("""update `tabSales Invoice Item` set description = (replace(description,'</p><p>',' '))""")
+	frappe.db.sql("""update `tabSales Invoice Item` set description = (replace(description,'<br>',''))""")
+	frappe.db.sql("""update `tabDelivery Note Item` set description = (replace(description,'<div class="ql-editor read-mode"><p>',''))""")
+	frappe.db.sql("""update `tabDelivery Note Item` set description = (replace(description,'</p></div>',''))""")
+	frappe.db.sql("""update `tabDelivery Note Item` set description = (replace(description,'</p><p>',' '))""")
+	frappe.errprint('Tags Eliminados')
+
+
+@frappe.whitelist()
+def quitar_tags_item():
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'<div class="ql-editor read-mode"><p>',''))""")
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'</p></div>',''))""")
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'</p><p>',' '))""")
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'<div><p>',' '))""")
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'<br>',' '))""")
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'<strong>',' '))""")
+	frappe.db.sql("""update `tabQuotation Item` set description = (replace(description,'</strong>',' '))""")
+	frappe.db.sql("""update `tabSales Order Item` set description = (replace(description,'<div class="ql-editor read-mode"><p>',''))""")
+	frappe.db.sql("""update `tabSales Order Item` set description = (replace(description,'</p></div>',''))""")
+	frappe.db.sql("""update `tabSales Order Item` set description = (replace(description,'</p><p>',' '))""")
+
+@frappe.whitelist()
+def quitar_tags():
+	frappe.db.sql("""update `tabPurchase Order Item` set description = (replace(description,'<div class="ql-editor read-mode"><p>',''))""")
+	frappe.db.sql("""update `tabPurchase Order Item` set description = (replace(description,'</p></div>',''))""")
+	frappe.db.sql("""update `tabPurchase Order Item` set description = (replace(description,'</p><p>',' '))""")
+	frappe.db.sql("""update `tabPurchase Order Item` set description = (replace(description,'<strong>',' '))""")
+	frappe.db.sql("""update `tabPurchase Order Item` set description = (replace(description,'</strong><strong>',' '))""")
+
+
+@frappe.whitelist()
+def get_chart_data():
+	query = """SELECT str_to_date(concat(date_format(`tabSales Invoice`.`posting_date`, '%Y-%m'), '-01'), '%Y-%m-%d') AS `posting_date`, sum(`tabSales Invoice`.`base_grand_total`) AS `sum`
+FROM `tabSales Invoice`
+WHERE (`tabSales Invoice`.`docstatus` = 1
+   AND  `tabSales Invoice`.`metodo_pago` = 'PPD' AND DATE(`tabSales Invoice`.`posting_date`) >= '2021-04-01')
+GROUP BY str_to_date(concat(date_format(`tabSales Invoice`.`posting_date`, '%Y-%m'), '-01'), '%Y-%m-%d')
+ORDER BY str_to_date(concat(date_format(`tabSales Invoice`.`posting_date`, '%Y-%m'), '-01'), '%Y-%m-%d') ASC
+	"""
+	data = frappe.db.sql(query, as_list=1)
+
+	datasets = []
+	labels = []
+	for d in data:
+		labels.append(d[0])
+		datasets.append(d[1])
+
+	query2 = """SELECT str_to_date(concat(date_format(`tabPayment Entry`.`posting_date`, '%Y-%m'), '-01'), '%Y-%m-%d') AS `creation`, sum(`tabPayment Entry`.`paid_amount`) AS `sum`
+FROM `tabPayment Entry`
+WHERE `tabPayment Entry`.`docstatus` = 1 AND `tabPayment Entry`.`payment_type` = 'Receive'
+GROUP BY str_to_date(concat(date_format(`tabPayment Entry`.`posting_date`, '%Y-%m'), '-01'), '%Y-%m-%d')
+ORDER BY str_to_date(concat(date_format(`tabPayment Entry`.`posting_date`, '%Y-%m'), '-01'), '%Y-%m-%d') ASC
+"""
+	data2 = frappe.db.sql(query2, as_list=1)
+
+	datapoints = []
+	labels2 = []
+	for d in data2:
+		labels2.append(d[0])
+		datapoints.append(d[1])
+
+	return{
+		"labels": labels,
+		"datasets": [{
+			"name": _("Ventas a Credito"),
+			"values": datasets,
+			"chartType": 'bar'
+		},
+		{
+			"name": _("Pagos"),
+			"values": datapoints,
+			"chartType": 'line'
+		}],
+		"type": "axis-mixed"
+	}
+
+
+@frappe.whitelist()
+def pi_monto_pendiente(name):
+	pi = frappe.get_doc('Purchase Invoice',name)
+	frappe.db.set_value("Purchase Invoice",name, 'monto_pendiente', pi.grand_total)
+
+@frappe.whitelist()
+def pago_proveedor_usd(name):
+    pe = frappe.get_doc('Payment Entry',name)
+    if pe.company == 'Sillas and Chairs':
+        per = frappe.get_list('Payment Entry Reference', filters={
+    'parent': pe.name})
+        for r in per:
+            frappe.db.set_value("Purchase Invoice",r, 'monto_pendiente', pe.paid_amount)
+
+
+@frappe.whitelist()
+def restore_monto_pendiente(name):
+	doc = frappe.get_doc('Payment Entry',name)
+	for i in doc.references:
+		frappe.db.set_value('Sales Invoice',i.reference_name,'monto_pendiente',i.monto_pendiente)
+		frappe.errprint(i.reference_name)
+		frappe.errprint(i.monto_pendiente)
+
+@frappe.whitelist()
+def clave(name):
+    numero = frappe.db.sql("""SELECT max(clave) + 1 as "clave" from `tabCustomer` ORDER BY creation desc """)
+    c = frappe.get_doc('Customer', name)
+    if c.clave is None:
+        frappe.db.set_value("Customer", c.name, 'clave', numero)
+#    frappe.db.sql("""UPDATE `tabCustomer` set cuenta_sat = CONCAT('110410', clave) WHERE cuenta_sat IS null """)

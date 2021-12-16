@@ -1,0 +1,52 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2021-09-30 15:26:51.503722",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "mandatory": 1,
+   "options": "01-01-2021",
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "mandatory": 1,
+   "options": "31-12-2021\n",
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{\"add_total_row\": 0}",
+ "letter_head": "BYPARSA",
+ "modified": "2021-10-06 13:25:30.837386",
+ "modified_by": "Administrator",
+ "module": "Totall",
+ "name": "M\u00e1s Vendido",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT item_code AS 'Art\u00edculo',\r\nsum(qty) AS 'sum'\r\nFROM `tabPOS Invoice Item`\r\nWHERE (docstatus = 1)\r\nAND creation >= %(from_date)s AND creation <= %(to_date)s and docstatus = 1\r\nGROUP BY item_code\r\nORDER BY sum DESC, item_code ASC\r\nlimit 15",
+ "ref_doctype": "POS Invoice",
+ "report_name": "M\u00e1s Vendido",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Facturacion"
+  }
+ ]
+}

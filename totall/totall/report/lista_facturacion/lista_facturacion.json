@@ -1,37 +1,30 @@
 {
- "add_total_row": 0, 
- "apply_user_permissions": 0, 
- "creation": "2020-04-22 12:06:54.174287", 
- "disabled": 0, 
- "docstatus": 0, 
- "doctype": "Report", 
- "idx": 0, 
- "is_standard": "Yes", 
- "letter_head": "CCIJ", 
- "modified": "2020-06-09 13:13:26.207996", 
- "modified_by": "Administrator", 
- "module": "Totall", 
- "name": "LISTA FACTURACION", 
- "owner": "Administrator", 
- "query": "SELECT\na.creation as \"Fecha::100\",\na.name as \"Folio:Link/Sales Invoice:60\",\na.customer as \"Nombre Cliente:Link/Customer:500\",\nb.description as \"Decsripcion::500\",\na.total as \"Subtotal::80\", \ncase when c.tax_amount is null then 0 else c.tax_amount end as \"IVA::80\", \na.grand_total as \"Total::80\",\ncase when a.docstatus = 2 then \"Cancelada\" when a.docstatus = 1 then null else a.docstatus end as \"Estado::100\"\nfrom `tabSales Invoice` a left join \n     `tabSales Invoice Item` b on a.name = b.parent left join \n     `tabSales Taxes and Charges` c on a.name = c.parent \nwhere a.posting_date >= %(a.from_date)s and a.posting_date <= %(a.to_date)s\norder by a.creation desc", 
- "ref_doctype": "Sales Invoice", 
- "report_name": "LISTA FACTURACION", 
- "report_type": "Query Report", 
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2020-04-22 12:06:54.174287",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2021-06-03 17:24:25.938130",
+ "modified_by": "Administrator",
+ "module": "Totall",
+ "name": "LISTA FACTURACION",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\na.creation as \"Fecha::100\",\na.name as \"Folio:Link/Sales Invoice:60\",\na.customer as \"Nombre Cliente:Link/Customer:500\",\na.cfdi_status as \"Estado::500\",\na.total as \"Subtotal::80\", \ncase when c.tax_amount is null then 0 else c.tax_amount end as \"IVA::80\", \na.grand_total as \"Total::80\"\nfrom `tabSales Invoice` a left join \n     `tabSales Invoice Item` b on a.name = b.parent left join \n     `tabSales Taxes and Charges` c on a.name = c.parent \nwhere a.posting_date >= %(a.from_date)s and a.posting_date <= %(a.to_date)s\norder by a.creation desc",
+ "ref_doctype": "Sales Invoice",
+ "report_name": "LISTA FACTURACION",
+ "report_type": "Query Report",
  "roles": [
   {
    "role": "Accounts User"
-  }, 
-  {
-   "role": "Facturacion"
-  }, 
+  },
   {
    "role": "Accounts Manager"
-  }, 
-  {
-   "role": "Cobranza"
-  }, 
-  {
-   "role": "Vendedor"
   }
  ]
 }

@@ -1,0 +1,13 @@
+{
+ "creation": "2021-10-11 11:23:40.523750",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart Source",
+ "idx": 0,
+ "modified": "2021-10-11 11:23:40.523750",
+ "modified_by": "Administrator",
+ "module": "Totall",
+ "name": "Ventas locales vs Woocomerce",
+ "owner": "Administrator",
+ "source_name": "Ventas locales vs Woocomerce",
+ "timeseries": 0
+}
