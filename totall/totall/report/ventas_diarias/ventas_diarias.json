@@ -1,35 +1,35 @@
 {
- "add_total_row": 1,
- "columns": [],
- "creation": "2019-12-16 16:23:42.975971",
- "disable_prepared_report": 0,
- "disabled": 0,
- "docstatus": 0,
- "doctype": "Report",
- "filters": [],
- "idx": 0,
- "is_standard": "Yes",
- "json": "{\"add_total_row\": 0}",
- "letter_head": "BYPARSA",
- "modified": "2021-11-17 10:15:48.677377",
- "modified_by": "Administrator",
- "module": "Totall",
- "name": "Ventas Diarias",
- "owner": "Administrator",
- "prepared_report": 0,
- "query": "select a.name as 'Folio:Link/Sales Invoice:100',\na.creation as 'Fecha::250',\nb.clave as 'Clave::90',\na.customer as 'Nombre Cliente:Link/Customer:200',\na.currency as 'Moneda::85',\ncase when a.name LIKE '%%TICKET%%' THEN a.grand_total / 1.16 else a.total end as 'Sub Total:Currency:100', \n(a.grand_total) - (case when a.name LIKE '%%TICKET%%' THEN a.grand_total / 1.16 else a.total end) as  'IVA:Currency:100', \na.grand_total as 'Total:Currency:100',\ncase when a.docstatus = '1' then 'Activo' when a.docstatus = '2' then 'Cancelado' when a.docstatus = '0' then 'Borrador' else a.docstatus end as 'Estado::100',\na.cfdi_status as 'Estado CFDI::120',\na.forma_de_pago as 'Forma de Pago::100',\nb.customer_type as 'TIpo de Cliente::150'\nfrom `tabSales Invoice` a left join  `tabCustomer` b on a.customer=b.name\nwhere a.posting_date >= %(from_date)s and a.posting_date <= %(to_date)s and a.name not like '%%DEVOLUCI\u00d3N%%'",
- "ref_doctype": "Sales Invoice",
- "report_name": "Ventas Diarias",
- "report_type": "Query Report",
+ "add_total_row": 1, 
+ "apply_user_permissions": 1, 
+ "creation": "2019-12-16 16:23:42.975971", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "json": "{\"add_total_row\": 0}", 
+ "letter_head": "BYPARSA", 
+ "modified": "2021-03-23 09:42:19.435803", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "Ventas Diarias", 
+ "owner": "Administrator", 
+ "query": "select a.creation as 'Fecha::100', \na.name as 'Folio:Link/Sales Invoice:100', \na.clave as 'Clave Cliente::100', \na.customer as 'Nombre Cliente:Link/Customer:200',\ncase when a.name LIKE '%%TICKET%%' THEN a.grand_total / 1.16 else a.total end as 'Sub Total:Currency:100', \n(a.grand_total) - (case when a.name LIKE '%%TICKET%%' THEN a.grand_total / 1.16 else a.total end) as  'IVA:Currency:100', \na.grand_total as 'Total:Currency:100',\ncase when a.docstatus = '1' then 'Activo' when a.docstatus = '2' then 'Cancelado' when a.docstatus = '0' then 'Borrador' else a.docstatus end as 'Estado::100',\na.cfdi_status as \"Estado CFDI\",\na.currency as 'Moneda::100',\na.forma_de_pago as \"Forma de Pago\", \nb.customer_type as \"Tipo de Cliente\"\nfrom `tabSales Invoice` a left join  `tabCustomer` b on a.customer=b.name\nwhere a.posting_date >= %(from_date)s and a.posting_date <= %(to_date)s and a.name not like '%%DEVOLUCI\u00d3N%%'", 
+ "ref_doctype": "Sales Invoice", 
+ "report_name": "Ventas Diarias", 
+ "report_type": "Query Report", 
  "roles": [
   {
    "role": "Accounts Manager"
-  },
+  }, 
   {
    "role": "Accounts User"
-  },
+  }, 
   {
    "role": "Facturacion"
+  }, 
+  {
+   "role": "Administrativo"
   }
  ]
 }

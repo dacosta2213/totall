@@ -8,7 +8,7 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "Sura", 
- "modified": "2019-11-23 09:58:01.725165", 
+ "modified": "2021-03-19 10:54:08.407641", 
  "modified_by": "Administrator", 
  "module": "Totall", 
  "name": "Acumulado De Ventas x Cliente", 
@@ -29,6 +29,9 @@
   }, 
   {
    "role": "Administrator"
+  }, 
+  {
+   "role": "Administrativo"
   }
  ]
 }

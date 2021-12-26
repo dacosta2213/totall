@@ -8,7 +8,7 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "Sura", 
- "modified": "2020-11-09 16:24:17.624315", 
+ "modified": "2021-07-24 09:49:16.500726", 
  "modified_by": "Administrator", 
  "module": "Totall", 
  "name": "Ventas y Utilidad por vendedor", 
@@ -29,6 +29,9 @@
   }, 
   {
    "role": "Administrator"
+  }, 
+  {
+   "role": "Administrativo"
   }
  ]
 }

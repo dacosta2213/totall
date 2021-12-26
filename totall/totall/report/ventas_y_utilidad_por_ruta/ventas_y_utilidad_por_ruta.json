@@ -1,0 +1,37 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2021-07-24 09:49:37.027603", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Sura", 
+ "modified": "2021-07-24 09:54:08.156702", 
+ "modified_by": "Administrator", 
+ "module": "Totall", 
+ "name": "Ventas y Utilidad por Ruta", 
+ "owner": "Administrator", 
+ "query": "select\ncustomer.ruta as \"Vendedor::180\",\nSUM(b.qty) as \"Cantidad Articulos::140\", \nSUM(@Importe := case when d.currency = 'USD' then b.amount * d.conversion_rate else b.amount end) as \"Importe Ventas:Currency:150\", \nsum(@ImporteCosto := (b.last_purchase_rate)*(b.qty)) as \"Importe Costo:Currency:140\",\nSUM(@Utilidad := (case when d.currency = 'USD' then b.amount * d.conversion_rate else b.amount end)- (@ImporteCosto)) AS \"Utilidad:Currency:140\",\n@Porcentaje := null AS \"Porcentaje::140\"\n\nfrom\n`tabItem` c left join\n`tabSales Invoice Item` b on c.item_code = b.item_code left join\n`tabSales Invoice` d on b.parent = d.name left join\n`tabvariables` e on d.name = e.parent left join\n`tabCustomer` customer on d.customer = customer.name\n\nwhere d.docstatus = 1 and d.posting_date >= %(d.from_date)s and d.posting_date <= %(d.to_date)s and b.qty >= '0'\nGROUP BY customer.ruta desc\n", 
+ "ref_doctype": "Sales Invoice", 
+ "report_name": "Ventas y Utilidad por Ruta", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  }, 
+  {
+   "role": "Accounts User"
+  }, 
+  {
+   "role": "Facturacion"
+  }, 
+  {
+   "role": "Administrator"
+  }, 
+  {
+   "role": "Administrativo"
+  }
+ ]
+}

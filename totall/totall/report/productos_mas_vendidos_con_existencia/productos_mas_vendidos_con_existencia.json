@@ -8,7 +8,7 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "Sura", 
- "modified": "2020-06-12 12:40:05.200029", 
+ "modified": "2021-03-19 10:56:57.392082", 
  "modified_by": "Administrator", 
  "module": "Totall", 
  "name": "Productos Mas Vendidos Con Existencia", 
@@ -26,6 +26,9 @@
   }, 
   {
    "role": "Facturacion"
+  }, 
+  {
+   "role": "Administrativo"
   }
  ]
 }
